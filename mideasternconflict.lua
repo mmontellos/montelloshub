@@ -1,4 +1,4 @@
-print("test")
+print("test1235342")
 -- Mid eastern conflict sim menu incoming
 --MEDAL GITHUB: https://github.com/shrimp-nz/medal
 --Give them a star!
