@@ -723,3 +723,4 @@ coroutine.wrap(autogunmodfunction)()
 Rayfield:LoadConfiguration()
 
 warn("Executing...")
+print("NewUpdate")
