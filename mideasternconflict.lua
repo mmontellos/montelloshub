@@ -250,7 +250,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 
 local Window = Rayfield:CreateWindow({
-	Name = "Mid Eastern Conflict Sim 1.0.0",
+	Name = "Mid Eastern Conflict Sim 1.0.1",
 	Icon = "app-window-mac", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
 	LoadingTitle = "Rayfield Interface Suite",
 	LoadingSubtitle = "Made by montell, ui lib by sirius",
@@ -261,7 +261,7 @@ local Window = Rayfield:CreateWindow({
  
 	ConfigurationSaving = {
 	   Enabled = true,
-	   FolderName = nil, -- Create a custom folder for your hub/game
+	   FolderName = "Montellos", -- Create a custom folder for your hub/game
 	   FileName = "montello hub"
 	},
  
@@ -307,16 +307,22 @@ local function autogunmods()
 		if autofirerate == true then
 			gunmodule2.ShootRate = fireratemodvalue
 			gunmodule2.WalkSpeed = walkspeedgun
+			gunmodule2.MuzzleVelocity = 30000
+			gunmodule2.BulletDrop = 0
 		end
 		if autorecoil == true then
 			gunmodule2.camRecoil = camRecoilTable
 			gunmodule2.gunRecoil = gunRecoilTable
 			gunmodule2.WalkSpeed = walkspeedgun
+			gunmodule2.MuzzleVelocity = 30000
+			gunmodule2.BulletDrop = 0
 		end
 		if autospread == true then
 			gunmodule2.MinSpread = 0
 			gunmodule2.MaxSpread = 0
 			gunmodule2.WalkSpeed = walkspeedgun
+			gunmodule2.MuzzleVelocity = 30000
+			gunmodule2.BulletDrop = 0
 		end	
 		if autofire == true then
 			gunmodule2.FireModes = firemodestable
@@ -324,6 +330,8 @@ local function autogunmods()
 			gunmodule2.StoredAmmo = 400
 			gunmodule2.MaxStoredAmmo = 600
 			gunmodule2.WalkSpeed = walkspeedgun
+			gunmodule2.MuzzleVelocity = 30000
+			gunmodule2.BulletDrop = 0
 		end
 
 	else
@@ -722,6 +730,24 @@ end
 coroutine.wrap(autogunmodfunction)()
 Rayfield:LoadConfiguration()
 
+for i,PlayerJoined in pairs(game.Players:GetPlayers()) do	
+	if PlayerJoined:IsInGroup(15469685) then
+		local role = PlayerJoined:GetRoleInGroup(15469685)
+		if role == "Moderator" then
+			game.Players.LocalPlayer:Kick("Staff Detected")
+		end
+		if role == "Admin" then
+			game.Players.LocalPlayer:Kick("Staff Detected")
+		end
+		if role == "Weare" then
+			game.Players.LocalPlayer:Kick("Staff Detected")
+		end
+
+	end	
+	
+end
+
+
 game.Players.PlayerAdded:connect(function(PlayerJoined)
 		if PlayerJoined:IsInGroup(15469685) then
 			local role = PlayerJoined:GetRoleInGroup(15469685)
@@ -744,5 +770,5 @@ end)
 
 
 
-warn("AntiDetect")
+warn("AntiDetect Version 2")
 
