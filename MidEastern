@@ -1,4 +1,4 @@
--- test1
+
 -- Mid eastern conflict sim menu incoming
 --MEDAL GITHUB: https://github.com/shrimp-nz/medal
 --Give them a star!
@@ -229,6 +229,7 @@ local autofire
 local automuzzle
 local autofirerate
 local autorecoil
+local walkspeedgun = 1
 local autospread
 local fireratemod
 local players = game:GetService("Players")
@@ -305,21 +306,24 @@ local function autogunmods()
 	if gunmodule2 ~= nil then
 		if autofirerate == true then
 			gunmodule2.ShootRate = fireratemodvalue
+			gunmodule2.WalkSpeed = walkspeedgun
 		end
 		if autorecoil == true then
 			gunmodule2.camRecoil = camRecoilTable
 			gunmodule2.gunRecoil = gunRecoilTable
+			gunmodule2.WalkSpeed = walkspeedgun
 		end
 		if autospread == true then
 			gunmodule2.MinSpread = 0
 			gunmodule2.MaxSpread = 0
-
+			gunmodule2.WalkSpeed = walkspeedgun
 		end	
 		if autofire == true then
 			gunmodule2.FireModes = firemodestable
 			gunmodule2.AmmoInGun = 400
 			gunmodule2.StoredAmmo = 400
 			gunmodule2.MaxStoredAmmo = 600
+			gunmodule2.WalkSpeed = walkspeedgun
 		end
 
 	else
@@ -476,6 +480,17 @@ local FireRateSlider = GunTab:CreateSlider({
 })
 
 
+local WalkSpeedSlider = GunTab:CreateSlider({
+	Name = "Walk Speed",
+	Range = {0.1, 2},
+	Increment = 0.01,
+	Suffix = "*10%",
+	CurrentValue = 1,
+	Flag = "FireRateSlider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		walkspeedgun = Value
+	end,
+})
 
 
  
