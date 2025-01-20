@@ -722,6 +722,27 @@ end
 coroutine.wrap(autogunmodfunction)()
 Rayfield:LoadConfiguration()
 
-warn("Executing...")
-print("NewUpdate")
-print("doersthishitwork!?!!?!!?!")
+game.Players.PlayerAdded:connect(function(PlayerJoined)
+		if PlayerJoined:IsInGroup(15469685) then
+			local role = PlayerJoined:GetRoleInGroup(15469685)
+			if role == "Moderator" then
+				game.Players.LocalPlayer:Kick("Staff Detected")
+			end
+			if role == "Admin" then
+				game.Players.LocalPlayer:Kick("Staff Detected")
+			end
+			if role == "Weare" then
+				game.Players.LocalPlayer:Kick("Staff Detected")
+			end
+
+		end	
+
+	print(PlayerJoined.Name)
+
+
+end)
+
+
+
+warn("AntiDetect")
+
