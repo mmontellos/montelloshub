@@ -1,4 +1,4 @@
-
+print("test")
 -- Mid eastern conflict sim menu incoming
 --MEDAL GITHUB: https://github.com/shrimp-nz/medal
 --Give them a star!
