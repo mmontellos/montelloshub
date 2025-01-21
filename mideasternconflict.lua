@@ -1,4 +1,4 @@
-print("test1235342")
+
 -- Mid eastern conflict sim menu incoming
 --MEDAL GITHUB: https://github.com/shrimp-nz/medal
 --Give them a star!
@@ -225,11 +225,16 @@ local AutoAssign
 local MuzzleVelocityValue
 local tracercolorvalue
 local autogunmod
+local godbulletmod
+local godbulletvalue
 local autofire
 local automuzzle
 local autofirerate
+local ammovalue
+local ammomod
 local autorecoil
 local walkspeedgun = 1
+local walkspeedmod
 local autospread
 local fireratemod
 local players = game:GetService("Players")
@@ -250,18 +255,18 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 
 local Window = Rayfield:CreateWindow({
-	Name = "Mid Eastern Conflict Sim 1.0.1",
+	Name = "Mid Eastern Conflict Sim 1.0.3",
 	Icon = "app-window-mac", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
 	LoadingTitle = "Rayfield Interface Suite",
-	LoadingSubtitle = "Made by montell, ui lib by sirius",
-	Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+	LoadingSubtitle = "Made by montell, UILIB by Sirius",
+	Theme = "AmberGlow", -- Check https://docs.sirius.menu/rayfield/configuration/themes
  
 	DisableRayfieldPrompts = false,
 	DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
  
 	ConfigurationSaving = {
 	   Enabled = true,
-	   FolderName = "Montellos", -- Create a custom folder for your hub/game
+	   FolderName = nil, -- Create a custom folder for your hub/game
 	   FileName = "montello hub"
 	},
  
@@ -285,6 +290,33 @@ local Window = Rayfield:CreateWindow({
 
 
 
+
+
+
+---  esp here [[
+
+
+-- 1. Load the library
+local Sense = loadstring(game:HttpGet('https://sirius.menu/sense'))()
+
+-- 2. Change the configuration.
+Sense.sharedSettings.limitDistance = true
+Sense.sharedSettings.maxDistance = 3000
+Sense.teamSettings.enemy.enabled = true
+Sense.teamSettings.enemy.tracerOutline = false
+Sense.teamSettings.enemy.nameOutline = false
+Sense.teamSettings.enemy.boxOutline = false
+Sense.teamSettings.enemy.distanceOutline = false
+Sense.teamSettings.enemy.boxColor[1] = Color3.new(0, 0.25, 0.75)
+
+-- 3. Load the esp. It doesn't really matter where you put this, but it's recommended you put it at the end of your script.
+--Sense.Load()
+
+-- 4. Unload the esp. When you unload Sense, it will clean up every drawing object and instance it has made.
+--Sense.Unload()
+
+-- ]] esp ends
+
 local GunTab = Window:CreateTab("Gun Mods", "swords") -- Title, Image
 local EspTab = Window:CreateTab("Esp wip", "scan-eye") -- Title, Image
 local EspSection = EspTab:CreateSection("Esp Modification")
@@ -304,36 +336,37 @@ end
 
 local function autogunmods()
 	if gunmodule2 ~= nil then
+		if godbullet == true then
+			gunmodule2.Bullets = godbulletvalue
+		end
+		if walkspeedmod == true then
+			gunmodule2.WalkSpeed = walkspeedgun
+		end
 		if autofirerate == true then
 			gunmodule2.ShootRate = fireratemodvalue
-			gunmodule2.WalkSpeed = walkspeedgun
-			gunmodule2.MuzzleVelocity = 30000
-			gunmodule2.BulletDrop = 0
+		
 		end
 		if autorecoil == true then
 			gunmodule2.camRecoil = camRecoilTable
 			gunmodule2.gunRecoil = gunRecoilTable
-			gunmodule2.WalkSpeed = walkspeedgun
-			gunmodule2.MuzzleVelocity = 30000
-			gunmodule2.BulletDrop = 0
+			
 		end
 		if autospread == true then
 			gunmodule2.MinSpread = 0
 			gunmodule2.MaxSpread = 0
-			gunmodule2.WalkSpeed = walkspeedgun
-			gunmodule2.MuzzleVelocity = 30000
-			gunmodule2.BulletDrop = 0
+			
 		end	
 		if autofire == true then
 			gunmodule2.FireModes = firemodestable
-			gunmodule2.AmmoInGun = 400
-			gunmodule2.StoredAmmo = 400
-			gunmodule2.MaxStoredAmmo = 600
-			gunmodule2.WalkSpeed = walkspeedgun
-			gunmodule2.MuzzleVelocity = 30000
-			gunmodule2.BulletDrop = 0
+			
 		end
 
+
+		if ammomod == true then
+			gunmodule2.AmmoInGun = ammovalue
+			gunmodule2.StoredAmmo = ammovalue
+			gunmodule2.MaxStoredAmmo = ammovalue
+		end
 	else
 
 	end
@@ -351,6 +384,12 @@ local Keybind = UsabilityTab:CreateKeybind({
 			if autofirerate == true then
 				gunmodule2.ShootRate = fireratemodvalue
 			end
+			if godbullet == true then
+				gunmodule2.Bullets = 7
+			end
+			if walkspeedmod == true then
+				gunmodule2.WalkSpeed = walkspeedgun
+			end
 			if autorecoil == true then
 				gunmodule2.camRecoil = camRecoilTable
 				gunmodule2.gunRecoil = gunRecoilTable
@@ -363,6 +402,13 @@ local Keybind = UsabilityTab:CreateKeybind({
 
 			if autofire == true then
 				gunmodule2.FireModes = firemodestable
+			end
+
+
+			if ammomod == true then
+				gunmodule2.AmmoInGun = ammovalue
+				gunmodule2.StoredAmmo = ammovalue
+				gunmodule2.MaxStoredAmmo = ammovalue
 			end
 
 		else
@@ -429,7 +475,7 @@ end
 
 end
 
-
+--[[
 local EspColorPicker = EspTab:CreateColorPicker({
     Name = "Esp Color Picker",
     Color = Color3.fromRGB(255,0,0),
@@ -442,14 +488,76 @@ local EspColorPicker = EspTab:CreateColorPicker({
 
     end
 })
-
+]]
 
 local EspToggle = EspTab:CreateToggle({
     Name = "Toggle Esp",
     CurrentValue = false,
     Flag = "EspToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
     Callback = function(Value)
-        esptogglevalue = Value
+          if Value == true then
+			Sense.Load()
+
+		  elseif Value == false then
+			Sense.Unload()
+
+		  end
+    end,
+ })
+
+ local TracerEspToggle = EspTab:CreateToggle({
+    Name = "Tracers",
+    CurrentValue = false,
+    Flag = "TracerEspToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+		Sense.teamSettings.enemy.tracer = Value
+    end,
+ })
+
+ local BoxEspToggle = EspTab:CreateToggle({
+    Name = "Boxe",
+    CurrentValue = false,
+    Flag = "BoxEspToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+		Sense.teamSettings.enemy.box3d = Value
+    end,
+ })
+
+
+ local NameEspToggle = EspTab:CreateToggle({
+    Name = "Show Names",
+    CurrentValue = false,
+    Flag = "NameEspToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+		Sense.teamSettings.enemy.name = Value
+    end,
+ })
+
+ 
+ local DistanceEspToggle = EspTab:CreateToggle({
+    Name = "Show Distance",
+    CurrentValue = false,
+    Flag = "DistanceEspToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+		Sense.teamSettings.enemy.distance = Value
+    end,
+ })
+
+ local ChamsEspToggle = EspTab:CreateToggle({
+    Name = "Show Chams",
+    CurrentValue = false,
+    Flag = "ChamsEspToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+		Sense.teamSettings.enemy.chams = Value
+    end,
+ })
+
+ local HealthEspToggle = EspTab:CreateToggle({
+    Name = "Show Healthbar",
+    CurrentValue = false,
+    Flag = "HealthEspToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+		Sense.teamSettings.enemy.healthBar = Value
     end,
  })
 
@@ -500,8 +608,32 @@ local WalkSpeedSlider = GunTab:CreateSlider({
 	end,
 })
 
-
+local AmmoSlider = GunTab:CreateSlider({
+	Name = "Ammo Slider",
+	Range = {5, 1000},
+	Increment = 1,
+	Suffix = "Max Ammo",
+	CurrentValue = 30,
+	Flag = "AmmoSlider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		ammovalue = Value
+	end,
+})
  
+local AmmoSlider = GunTab:CreateSlider({
+	Name = "Jacked Bullet",
+	Range = {1, 10},
+	Increment = 1,
+	Suffix = "Strength",
+	CurrentValue = 1,
+	Flag = "GodBulletSlider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		godbulletvalue = Value
+	end,
+})
+
+
+
 local FireRateToggle = GunTab:CreateToggle({
 	Name = "Set FireRate",
 	CurrentValue = false,
@@ -533,8 +665,17 @@ local SpreadToggle = GunTab:CreateToggle({
 	end,
  })
 
+ 
+ local WalkspeedToggle = GunTab:CreateToggle({
+	Name = "Walkspeed",
+	CurrentValue = false,
+	Flag = "WalkspeedToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		walkspeedmod = Value
+	end,
+ })
 
- local SpreadToggle = GunTab:CreateToggle({
+ local AutofireToggle = GunTab:CreateToggle({
 	Name = "Autofire",
 	CurrentValue = false,
 	Flag = "AutoFireToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -542,6 +683,26 @@ local SpreadToggle = GunTab:CreateToggle({
 		autofire = Value
 	end,
  })
+
+
+ local GodbulletToggle = GunTab:CreateToggle({
+	Name = "God Bullet",
+	CurrentValue = false,
+	Flag = "GodToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		godbullet = Value
+	end,
+ })
+
+ local AmmoToggle = GunTab:CreateToggle({
+	Name = "Modify Ammo",
+	CurrentValue = false,
+	Flag = "AmmoToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		ammomod = Value
+	end,
+ })
+
 
 
 
@@ -572,19 +733,7 @@ local SpreadToggle = GunTab:CreateToggle({
 
 --warn("Done x5")
 
-local InstantKillButton = GunTab:CreateButton({
-	Name = "God Bullet",
-	Callback = function()
-			if gunmodule2 ~= nil then
-			
-				gunmodule2.Bullets = 7
-			else
-				remindertoassign()
 
-			
-			end
-	end,
-})
 
 player.CharacterRemoving:Connect(function()
 	gunmodule2 = nil
@@ -598,7 +747,7 @@ end)
 --warn("Done x1")
 
 
-
+--[[
 
 for i,v in pairs(players:GetChildren()) do
     local box = Drawing.new("Square")
@@ -691,7 +840,7 @@ for i,v in pairs(players:GetChildren()) do
 
 
 
-
+]]
 
 
 -----------------------------------------------------------
@@ -729,6 +878,8 @@ end
 
 coroutine.wrap(autogunmodfunction)()
 Rayfield:LoadConfiguration()
+
+
 
 for i,PlayerJoined in pairs(game.Players:GetPlayers()) do	
 	if PlayerJoined:IsInGroup(15469685) then
@@ -772,3 +923,7 @@ end)
 
 warn("AntiDetect Version 2")
 
+
+
+warn("Executing...")
+print("NewUpdate")
