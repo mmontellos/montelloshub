@@ -222,8 +222,10 @@ local gunmodule
 
 local gunmodule2
 local AutoAssign
+local MuzzlVelocityMod
 local MuzzleVelocityValue
 local tracercolorvalue
+local nobulletdrop
 local autogunmod
 local godbulletmod
 local godbulletvalue
@@ -231,6 +233,7 @@ local autofire
 local automuzzle
 local autofirerate
 local ammovalue
+local antistaff
 local ammomod
 local autorecoil
 local walkspeedgun = 1
@@ -255,9 +258,9 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 
 local Window = Rayfield:CreateWindow({
-	Name = "Mid Eastern Conflict Sim 1.0.3",
+	Name = "Mid Eastern Conflict Sim 1.0.4",
 	Icon = "app-window-mac", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-	LoadingTitle = "Rayfield Interface Suite",
+	LoadingTitle = "Thanks to Sirius",
 	LoadingSubtitle = "Made by montell, UILIB by Sirius",
 	Theme = "AmberGlow", -- Check https://docs.sirius.menu/rayfield/configuration/themes
  
@@ -336,7 +339,13 @@ end
 
 local function autogunmods()
 	if gunmodule2 ~= nil then
-		if godbullet == true then
+		if MuzzlVelocityMod == true then
+			gunmodule2.MuzzleVelocity = 300000
+		end
+		if nobulletdrop == true then
+			gunmodule2.BulletDrop = 0
+		end
+		if godbulletmod == true then
 			gunmodule2.Bullets = godbulletvalue
 		end
 		if walkspeedmod == true then
@@ -381,10 +390,13 @@ local Keybind = UsabilityTab:CreateKeybind({
 	Callback = function(Keybind)
 -----------------
 		if gunmodule2 ~= nil then
+			if nobulletdrop == true then
+				gunmodule2.BulletDrop = 0
+			end
 			if autofirerate == true then
 				gunmodule2.ShootRate = fireratemodvalue
 			end
-			if godbullet == true then
+			if godbulletmod == true then
 				gunmodule2.Bullets = 7
 			end
 			if walkspeedmod == true then
@@ -416,6 +428,24 @@ local Keybind = UsabilityTab:CreateKeybind({
 
 		end
 -------------------
+	end,
+ })
+
+ local StaffDetectToggle = UsabilityTab:CreateToggle({
+	Name = "Anti Admin",
+	CurrentValue = true,
+	Flag = "StaffToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		if Value == true then
+			Rayfield:Notify({
+				Title = "Alert",
+				Content = "Anti Admin Toggled!",
+				Duration = 6.5,
+				Image = "shield-alert",
+			 })
+		end
+
+		antistaff = Value
 	end,
  })
 
@@ -596,6 +626,19 @@ local FireRateSlider = GunTab:CreateSlider({
 })
 
 
+
+local FireRateToggle = GunTab:CreateToggle({
+	Name = "Set FireRate",
+	CurrentValue = false,
+	Flag = "FireRateToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		autofirerate = Value
+	end,
+ })
+
+
+
+
 local WalkSpeedSlider = GunTab:CreateSlider({
 	Name = "Walk Speed",
 	Range = {0.1, 2},
@@ -607,6 +650,19 @@ local WalkSpeedSlider = GunTab:CreateSlider({
 		walkspeedgun = Value
 	end,
 })
+
+
+
+ local WalkspeedToggle = GunTab:CreateToggle({
+	Name = "Walkspeed",
+	CurrentValue = false,
+	Flag = "WalkspeedToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		walkspeedmod = Value
+	end,
+ })
+
+
 
 local AmmoSlider = GunTab:CreateSlider({
 	Name = "Ammo Slider",
@@ -620,12 +676,25 @@ local AmmoSlider = GunTab:CreateSlider({
 	end,
 })
  
-local AmmoSlider = GunTab:CreateSlider({
-	Name = "Jacked Bullet",
-	Range = {1, 10},
+
+
+ local AmmoToggle = GunTab:CreateToggle({
+	Name = "Modify Ammo",
+	CurrentValue = false,
+	Flag = "AmmoToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		ammomod = Value
+	end,
+ })
+
+
+
+local GodBulletSlider = GunTab:CreateSlider({
+	Name = "Bullet Strength",
+	Range = {2, 10},
 	Increment = 1,
 	Suffix = "Strength",
-	CurrentValue = 1,
+	CurrentValue = 2,
 	Flag = "GodBulletSlider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
 		godbulletvalue = Value
@@ -633,15 +702,16 @@ local AmmoSlider = GunTab:CreateSlider({
 })
 
 
-
-local FireRateToggle = GunTab:CreateToggle({
-	Name = "Set FireRate",
+local GodbulletToggle = GunTab:CreateToggle({
+	Name = "Bullet Strength",
 	CurrentValue = false,
-	Flag = "FireRateToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "GodToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
-		autofirerate = Value
+		godbulletmod = Value
 	end,
  })
+
+
 
 
  
@@ -654,6 +724,23 @@ local RecoilToggle = GunTab:CreateToggle({
 	end,
  })
 
+ local MuzzleVelocityToggle = GunTab:CreateToggle({
+	Name = "Muzzle Velocity",
+	CurrentValue = false,
+	Flag = "MuzzleVelocityToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		MuzzlVelocityMod = Value
+	end,
+ })
+
+ local NoBulletDropToggle = GunTab:CreateToggle({
+	Name = "No Bullet Drop",
+	CurrentValue = false,
+	Flag = "NoBulletDropToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		nobulletdrop = Value
+	end,
+ })
 
  
 local SpreadToggle = GunTab:CreateToggle({
@@ -666,15 +753,6 @@ local SpreadToggle = GunTab:CreateToggle({
  })
 
  
- local WalkspeedToggle = GunTab:CreateToggle({
-	Name = "Walkspeed",
-	CurrentValue = false,
-	Flag = "WalkspeedToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		walkspeedmod = Value
-	end,
- })
-
  local AutofireToggle = GunTab:CreateToggle({
 	Name = "Autofire",
 	CurrentValue = false,
@@ -685,25 +763,24 @@ local SpreadToggle = GunTab:CreateToggle({
  })
 
 
- local GodbulletToggle = GunTab:CreateToggle({
-	Name = "God Bullet",
-	CurrentValue = false,
-	Flag = "GodToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		godbullet = Value
+--[[
+ local LegitModButton = GunTab:CreateButton({
+	Name = "Legit Gun Settings",
+	Callback = function()
+		fireratemodvalue = 800
+		godbulletvalue = 2
+		walkspeedgun = 1.05
+		ammovalue = 60
+		Rayfield:Notify({
+			Title = "Done",
+			Content = "Successfully Set Gun Config, apply & re-equip your gun",
+			Duration = 6.5,
+			Image = "circle-check-big",
+		 })
 	end,
- })
 
- local AmmoToggle = GunTab:CreateToggle({
-	Name = "Modify Ammo",
-	CurrentValue = false,
-	Flag = "AmmoToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		ammomod = Value
-	end,
- })
-
-
+})
+]]
 
 
  local ApplyMods = GunTab:CreateButton({
@@ -879,19 +956,38 @@ end
 coroutine.wrap(autogunmodfunction)()
 Rayfield:LoadConfiguration()
 
-
+local function notifyadmin()
+	Rayfield:Notify({
+		Title = "Warning!",
+		Content = "Staff Detected in the server, act legit!",
+		Duration = 6.5,
+		Image = "shield-alert",
+	 })
+end
 
 for i,PlayerJoined in pairs(game.Players:GetPlayers()) do	
 	if PlayerJoined:IsInGroup(15469685) then
 		local role = PlayerJoined:GetRoleInGroup(15469685)
 		if role == "Moderator" then
-			game.Players.LocalPlayer:Kick("Staff Detected")
+			if antistaff == true then
+				game.Players.LocalPlayer:Kick("Staff Detected")
+			
+			end
+			notifyadmin()
 		end
 		if role == "Admin" then
-			game.Players.LocalPlayer:Kick("Staff Detected")
+			if antistaff == true then
+				game.Players.LocalPlayer:Kick("Staff Detected")
+			
+			end
+			notifyadmin()
 		end
 		if role == "Weare" then
-			game.Players.LocalPlayer:Kick("Staff Detected")
+			if antistaff == true then
+				game.Players.LocalPlayer:Kick("Staff Detected")
+			
+			end
+			notifyadmin()
 		end
 
 	end	
@@ -899,17 +995,31 @@ for i,PlayerJoined in pairs(game.Players:GetPlayers()) do
 end
 
 
+
+
 game.Players.PlayerAdded:connect(function(PlayerJoined)
 		if PlayerJoined:IsInGroup(15469685) then
 			local role = PlayerJoined:GetRoleInGroup(15469685)
 			if role == "Moderator" then
-				game.Players.LocalPlayer:Kick("Staff Detected")
+				if antistaff == true then
+					game.Players.LocalPlayer:Kick("Staff Detected")
+				
+				end
+				notifyadmin()
 			end
 			if role == "Admin" then
-				game.Players.LocalPlayer:Kick("Staff Detected")
+				if antistaff == true then
+					game.Players.LocalPlayer:Kick("Staff Detected")
+				
+				end
+				notifyadmin()
 			end
 			if role == "Weare" then
-				game.Players.LocalPlayer:Kick("Staff Detected")
+				if antistaff == true then
+					game.Players.LocalPlayer:Kick("Staff Detected")
+				
+				end
+				notifyadmin()
 			end
 
 		end	
