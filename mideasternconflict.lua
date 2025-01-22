@@ -232,6 +232,8 @@ local godbulletvalue
 local autofire
 local automuzzle
 local autofirerate
+local spreadvalue
+
 local ammovalue
 local antistaff
 local ammomod
@@ -361,8 +363,8 @@ local function autogunmods()
 			
 		end
 		if autospread == true then
-			gunmodule2.MinSpread = 0
-			gunmodule2.MaxSpread = 0
+			gunmodule2.MinSpread = spreadvalue
+			gunmodule2.MaxSpread = spreadvalue
 			
 		end	
 		if autofire == true then
@@ -397,7 +399,7 @@ local Keybind = UsabilityTab:CreateKeybind({
 				gunmodule2.ShootRate = fireratemodvalue
 			end
 			if godbulletmod == true then
-				gunmodule2.Bullets = 7
+				gunmodule2.Bullets = godbulletvalue
 			end
 			if walkspeedmod == true then
 				gunmodule2.WalkSpeed = walkspeedgun
@@ -408,7 +410,7 @@ local Keybind = UsabilityTab:CreateKeybind({
 			end
 			if autospread == true then
 				gunmodule2.MinSpread = 0
-				gunmodule2.MaxSpread = 0
+				gunmodule2.MaxSpread = spreadvalue
 
 			end	
 
@@ -691,7 +693,7 @@ local AmmoSlider = GunTab:CreateSlider({
 
 local GodBulletSlider = GunTab:CreateSlider({
 	Name = "Bullet Strength",
-	Range = {2, 10},
+	Range = {2, 15},
 	Increment = 1,
 	Suffix = "Strength",
 	CurrentValue = 2,
@@ -712,7 +714,26 @@ local GodbulletToggle = GunTab:CreateToggle({
  })
 
 
+ local Spreadslider = GunTab:CreateSlider({
+	Name = "Spread, Good For Shotguns",
+	Range = {0, 45},
+	Increment = 1,
+	Suffix = "Spread",
+	CurrentValue = 0,
+	Flag = "SpreadSlider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		spreadvalue = Value
+	end,
+})
 
+local SpreadToggle = GunTab:CreateToggle({
+	Name = "No Bullet Spread",
+	CurrentValue = false,
+	Flag = "SpreadToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		autospread = Value
+	end,
+ })
 
  
 local RecoilToggle = GunTab:CreateToggle({
@@ -743,15 +764,6 @@ local RecoilToggle = GunTab:CreateToggle({
  })
 
  
-local SpreadToggle = GunTab:CreateToggle({
-	Name = "No Bullet Spread",
-	CurrentValue = false,
-	Flag = "SpreadToggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		autospread = Value
-	end,
- })
-
  
  local AutofireToggle = GunTab:CreateToggle({
 	Name = "Autofire",
