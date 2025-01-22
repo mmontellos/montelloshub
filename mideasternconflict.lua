@@ -260,7 +260,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 
 local Window = Rayfield:CreateWindow({
-	Name = "Mid Eastern Conflict Sim 1.0.4",
+	Name = "Mid Eastern Conflict Sim 1.0.5",
 	Icon = "app-window-mac", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
 	LoadingTitle = "Thanks to Sirius",
 	LoadingSubtitle = "Made by montell, UILIB by Sirius",
